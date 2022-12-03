@@ -41,4 +41,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Generate a secure password.
+     *
+     * @param int $bytes
+     * @return string
+     */
+    public static function generatePassword($bytes = 16): string
+    {
+        $randBin = openssl_random_pseudo_bytes($bytes);
+        return bin2hex($randBin);
+    }
 }
