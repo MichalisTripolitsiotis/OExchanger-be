@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use Carbon\Carbon;
 use Illuminate\Auth\Notifications\VerifyEmail as NotificationsVerifyEmail;
 
 class VerifyEmail extends NotificationsVerifyEmail
@@ -17,7 +18,9 @@ class VerifyEmail extends NotificationsVerifyEmail
     {
         $payload = $this->getToken($notifiable);
 
-        return '?token=' . $payload;
+        // The reason we get the url, is to be used from the FE
+        // in order to send the user to a specific url.
+        return $notifiable->url . '?token=' . $payload;
     }
 
     /**
@@ -30,7 +33,9 @@ class VerifyEmail extends NotificationsVerifyEmail
     protected function getToken($notifiable)
     {
         return base64_encode(json_encode([
-            'hash' => encrypt($notifiable->getEmailForVerification())
+            'id'         => $notifiable->getKey(),
+            'hash'       => encrypt($notifiable->getEmailForVerification()),
+            'expiration' => encrypt(Carbon::now()->addMinutes(10)->toIso8601String()),
         ]));
     }
 }

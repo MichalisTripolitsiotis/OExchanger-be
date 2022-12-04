@@ -8,6 +8,8 @@ type Mutation {
   login(email: String!, password: String!): String!
   register(input: RegisterInput! @spread): RegisterResponse!
   verifyEmail(input: VerifyEmailInput! @spread): Boolean!
+  forgotPassword(input: ForgotPasswordInput! @spread): Boolean
+  resetPassword(input: ResetPasswordInput! @spread): String
 
   logout: Boolean @guard
 }
@@ -30,18 +32,21 @@ input RegisterInput {
     email: String! @rules(apply: ["required", "email", "unique:users,email"])
     password: String! @rules(apply: ["required", "confirmed", "min:8"])
     password_confirmation: String!
+    callbackUrl: String! @rules(apply: ["required", "url"])
 }
 
 input ForgotPasswordInput {
     email: String! @rules(apply: ["required", "email"])
+    callbackUrl: String! @rules(apply: ["required", "url"])
 }
 
 input VerifyEmailInput {
     token: String!
 }
 
-input UpdatePassword {
-    old_password: String!
+input ResetPasswordInput {
+    token: String!
+    email: String! @rules(apply: ["required", "email"])
     password: String! @rules(apply: ["required", "confirmed", "min:8"])
     password_confirmation: String!
 }
