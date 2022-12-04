@@ -5,9 +5,11 @@ namespace Tests\Feature\Auth;
 use App\Models\User;
 use App\Notifications\VerifyEmail;
 use Illuminate\Auth\Events\Verified;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\Password;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
@@ -250,6 +252,138 @@ class AuthTest extends TestCase
     }
 
     /**
+     * @return void
+     *
+     * Ensure that a user the email with the password reset token
+     * can be sent successfully.
+     */
+    public function test_forgot_password_successfully(): void
+    {
+        Notification::fake();
+
+        $mutation =
+            /** @lang GraphQL */
+            'mutation ForgotPassword($input: ForgotPasswordInput!) {
+                forgotPassword(input: $input)
+            }
+        ';
+
+        $input = [
+            'input' => [
+                'email' => $this->user->email,
+                'callbackUrl' => 'https://www.example.com'
+            ]
+        ];
+
+        $response = $this->postGraphQL([
+            'query' => $mutation,
+            'variables' => $input
+        ]);
+
+        Notification::assertSentTo([$this->user], ResetPassword::class);
+
+        $response->assertJson([
+            'data' => [
+                'forgotPassword' => true
+            ],
+        ]);
+
+        $this->assertDatabaseHas('password_resets', [
+            'email' => $this->user->email,
+        ]);
+    }
+
+    /**
+     * @test
+     *
+     * Ensure that a user can change the password successfully.
+     */
+    public function test_password_reset_successfully(): void
+    {
+        $mutation =
+            /** @lang GraphQL */
+            'mutation ResetPassword($input: ResetPasswordInput!) {
+                resetPassword(input: $input)
+            }
+        ';
+
+        $token = Password::createToken($this->user);
+
+        $input = [
+            'input' => [
+                'token' => $token,
+                'email' => $this->user->email,
+                'password' => 'newPassword123',
+                'password_confirmation' => 'newPassword123'
+            ]
+        ];
+
+        $response = $this->postGraphQL([
+            'query' => $mutation,
+            'variables' => $input
+        ]);
+
+        //override the token
+        $data = json_decode($response->getContent(), true);
+        static::$token = $token = $data['data']['resetPassword'];
+        $this->assertNotEquals(null, $token);
+
+        $this->assertDatabaseMissing('password_resets', [
+            'email' => $this->user->email,
+        ]);
+
+        $user = User::find($this->user->id);
+        $this->assertTrue(Hash::check('newPassword123', $user->password));
+    }
+
+    /**
+     * @test
+     *
+     * Ensure that user's password cannot change if the token is invalid.
+     */
+    public function test_password_reset_incorrect_token(): void
+    {
+        $mutation =
+            /** @lang GraphQL */
+            'mutation ResetPassword($input: ResetPasswordInput!) {
+                resetPassword(input: $input)
+            }
+        ';
+
+        $token = Password::createToken($this->user);
+
+        $input = [
+            'input' => [
+                'token' => 'invalid_token',
+                'email' => $this->user->email,
+                'password' => 'newPassword12345',
+                'password_confirmation' => 'newPassword12345'
+            ]
+        ];
+
+        $response = $this->postGraphQL([
+            'query' => $mutation,
+            'variables' => $input
+        ]);
+
+        $response->assertJson([
+            'errors' => [
+                [
+                    'debugMessage' => "Provided token is invalid"
+                ],
+            ],
+        ]);
+
+        $this->assertDatabaseHas('password_resets', [
+            'email' => $this->user->email,
+        ]);
+
+        $user = User::find($this->user->id);
+        $this->assertFalse(Hash::check('newPassword12345', $user->password));
+    }
+
+
+    /**
      * Ensure that the authenticated user can access the 'me'
      * endpoint.
      *
@@ -290,7 +424,7 @@ class AuthTest extends TestCase
      *
      * @return void
      */
-    public function test_unauthenticated_user_can_access_me_endpoint(): void
+    public function test_unauthenticated_user_cannot_access_me_endpoint(): void
     {
         $query =
             /** @lang GraphQL */
