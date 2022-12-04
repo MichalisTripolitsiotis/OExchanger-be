@@ -18,7 +18,7 @@ class VerifyEmail extends NotificationsVerifyEmail
     {
         $payload = $this->getToken($notifiable);
 
-        return '?token=' . $payload;
+        return env('FRONT_URL') . '?token=' . $payload;
     }
 
     /**
