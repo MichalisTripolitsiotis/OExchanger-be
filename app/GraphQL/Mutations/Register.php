@@ -26,6 +26,8 @@ final class Register
 
         $createUser = User::create($input);
 
+        // @see VerifyEmail class.
+        $createUser->url = $args['callbackUrl'];
         event(new Registered($createUser));
 
         return [

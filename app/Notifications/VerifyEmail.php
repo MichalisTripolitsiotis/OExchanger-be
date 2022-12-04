@@ -18,7 +18,9 @@ class VerifyEmail extends NotificationsVerifyEmail
     {
         $payload = $this->getToken($notifiable);
 
-        return env('FRONT_URL') . '?token=' . $payload;
+        // The reason we get the url, is to be used from the FE
+        // in order to send the user to a specific url.
+        return $notifiable->url . '?token=' . $payload;
     }
 
     /**

@@ -4,6 +4,7 @@ namespace Tests\Feature\Auth;
 
 use App\Models\User;
 use App\Notifications\VerifyEmail;
+use Carbon\Carbon;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Event;
@@ -46,7 +47,8 @@ class AuthTest extends TestCase
                 "name" => "John Doe",
                 "email" => "jdoe@gmail.com",
                 "password" => "password123",
-                "password_confirmation" => "password123"
+                "password_confirmation" => "password123",
+                "callbackUrl" => "https://www.example.com"
             ]
         ];
 
@@ -99,7 +101,8 @@ class AuthTest extends TestCase
                 "name" => "Peter Doe",
                 "email" => "pdoe@gmail.com",
                 "password" => "password123",
-                "password_confirmation" => "password1234"
+                "password_confirmation" => "password1234",
+                "callbackUrl" => "https://www.example.com"
             ]
         ];
 
@@ -139,7 +142,8 @@ class AuthTest extends TestCase
                 "name" => $this->user->name,
                 "email" => $this->user->email,
                 "password" => "password123",
-                "password_confirmation" => "password123"
+                "password_confirmation" => "password123",
+                "callbackUrl" => "https://www.example.com"
             ]
         ];
 
@@ -165,7 +169,9 @@ class AuthTest extends TestCase
         Event::fake([Verified::class]);
 
         $payload = base64_encode(json_encode([
-            'hash'  => encrypt($this->user->getEmailForVerification()),
+            'id'         => $this->user->id,
+            'hash'       => encrypt($this->user->getEmailForVerification()),
+            'expiration' => encrypt(Carbon::now()->addMinutes(10)->toIso8601String()),
         ]));
 
         $input = [
