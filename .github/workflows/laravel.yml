@@ -15,9 +15,8 @@ jobs:
         # Docker Hub image (also with version)
         image: mysql:5.7
         env:
-          ## Accessing to Github secrets, where you can store your configuration
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          MYSQL_DATABASE: db_test
+          MYSQL_DATABASE: laravel
+          MYSQL_ROOT_PASSWORD: password
         ports:
           - 33306:3306
 
@@ -39,8 +38,8 @@ jobs:
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DB_CONNECTION: mysql
-          DB_DATABASE: db_test
+          DB_DATABASE: laravel
           DB_PORT: 33306
           DB_USER: root
-          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          DB_PASSWORD: password
         run: vendor/bin/phpunit
