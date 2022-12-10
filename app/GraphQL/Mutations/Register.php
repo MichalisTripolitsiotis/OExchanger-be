@@ -10,7 +10,7 @@ final class Register
 {
     /**
      * @param  null  $_
-     * @param  array{}  $args
+     * @param  array{password: string, password_confirmation: string, callbackUrl: string}  $args
      */
     public function __invoke($_, array $args)
     {
@@ -21,17 +21,18 @@ final class Register
             ];
         }
 
-        $input = collect($args)->except('password_confirmation')->toArray();
+        $input = collect($args)->except(['password_confirmation'])->toArray();
         $input['password'] = Hash::make($input['password']);
 
-        $createUser = User::create($input);
+        /** @var User $createdUser */
+        $createdUser = User::create($input);
 
         // @see VerifyEmail class.
-        $createUser->url = $args['callbackUrl'];
-        event(new Registered($createUser));
+        $createdUser->url = $args['callbackUrl'];
+        event(new Registered($createdUser));
 
         return [
-            'message' => 'Account created successfully. An email sent to your account.',
+            'message' => 'Account created successfully. An email just sent.',
         ];
     }
 }

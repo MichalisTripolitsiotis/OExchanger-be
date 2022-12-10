@@ -29,7 +29,7 @@ class AuthTest extends TestCase
      *
      * @return void
      */
-    public function test_user_registers_successfully(): void
+    public function testUserRegistersSuccessfully(): void
     {
         Notification::fake();
 
@@ -60,7 +60,7 @@ class AuthTest extends TestCase
         $response->assertJsonFragment([
             'data' => [
                 'register' => [
-                    'message' => "Account created successfully. An email sent to your account."
+                    'message' => "Account created successfully. An email just sent."
                 ],
             ]
         ]);
@@ -83,7 +83,7 @@ class AuthTest extends TestCase
      *
      * @return void
      */
-    public function test_user_cannot_register_with_misspelled_password(): void
+    public function testUserCannotRegisterWithMisspelledPassword(): void
     {
         Notification::fake();
 
@@ -124,7 +124,7 @@ class AuthTest extends TestCase
     /**
      * @return void
      */
-    public function test_user_cannot_registered_if_already_did(): void
+    public function testUserCannotRegisteredIfAlreadyDid(): void
     {
         Notification::fake();
 
@@ -163,7 +163,7 @@ class AuthTest extends TestCase
      *
      * @return void
      */
-    public function test_user_verifies_email_successfully(): void
+    public function testUserVerifiesEmailSuccessfully(): void
     {
         Notification::fake();
         Event::fake([Verified::class]);
@@ -209,7 +209,7 @@ class AuthTest extends TestCase
      *
      * @return void
      */
-    public function test_user_login_successfully(): void
+    public function testUserLoginSuccessfully(): void
     {
         $mutation =
             /** @lang GraphQL */
@@ -237,7 +237,7 @@ class AuthTest extends TestCase
      *
      * @return void
      */
-    public function test_user_cannot_login_with_wrong_credentials(): void
+    public function testUserCannotLoginWithWrongCredentials(): void
     {
         $mutation =
             /** @lang GraphQL */
@@ -263,7 +263,7 @@ class AuthTest extends TestCase
      * Ensure that a user the email with the password reset token
      * can be sent successfully.
      */
-    public function test_forgot_password_successfully(): void
+    public function testForgotPasswordSuccessfully(): void
     {
         Notification::fake();
 
@@ -304,7 +304,7 @@ class AuthTest extends TestCase
      *
      * Ensure that a user can change the password successfully.
      */
-    public function test_password_reset_successfully(): void
+    public function testPasswordResetSuccessfully(): void
     {
         $mutation =
             /** @lang GraphQL */
@@ -347,7 +347,7 @@ class AuthTest extends TestCase
      *
      * Ensure that user's password cannot change if the token is invalid.
      */
-    public function test_password_reset_incorrect_token(): void
+    public function testPasswordResetIncorrectToken(): void
     {
         $mutation =
             /** @lang GraphQL */
@@ -395,7 +395,7 @@ class AuthTest extends TestCase
      *
      * @return void
      */
-    public function test_authenticated_user_can_access_me_endpoint(): void
+    public function testAuthenticatedUserCanAccessMeEndpoint(): void
     {
         $user = User::factory()->create();
 
@@ -430,7 +430,7 @@ class AuthTest extends TestCase
      *
      * @return void
      */
-    public function test_unauthenticated_user_cannot_access_me_endpoint(): void
+    public function testUnauthenticatedUserCannotAccessMeEndpoint(): void
     {
         $query =
             /** @lang GraphQL */
@@ -454,7 +454,7 @@ class AuthTest extends TestCase
         ]);
     }
 
-    public function test_user_can_logout_successfully(): void
+    public function testUserCanLogoutSuccessfully(): void
     {
         $user = User::factory()->create();
 
