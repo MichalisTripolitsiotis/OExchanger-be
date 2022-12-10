@@ -13,13 +13,14 @@ final class Logout
     public function __invoke($_, array $args)
     {
         if ($user = auth('sanctum')->user()) {
-  
-            $user->currentAccessToken()->delete();
+
+            /** @var \Laravel\Sanctum\PersonalAccessToken $token */
+            $token = $user->currentAccessToken();
+            $token->delete();
 
             return true;
         }
 
         return false;
-
     }
 }

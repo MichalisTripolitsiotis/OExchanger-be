@@ -10,7 +10,7 @@ final class ForgotPassword
 {
     /**
      * @param  null  $_
-     * @param  array{}  $args
+     * @param  array{email: string, callbackUrl: string}  $args
      */
     public function __invoke($_, array $args)
     {
