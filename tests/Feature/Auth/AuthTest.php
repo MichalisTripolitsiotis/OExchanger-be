@@ -60,7 +60,7 @@ class AuthTest extends TestCase
         $response->assertJsonFragment([
             'data' => [
                 'register' => [
-                    'message' => "Account created successfully. An email sent to your account."
+                    'message' => "Account created successfully. An email just sent."
                 ],
             ]
         ]);
