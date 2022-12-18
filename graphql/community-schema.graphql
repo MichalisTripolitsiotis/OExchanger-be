@@ -1,0 +1,37 @@
+extend type Query {
+    communities: [Community!]! @all @guard
+    community(id: ID! @eq): Community @find
+}
+
+extend type Mutation {
+  createCommunity(input: CreateCommunityInput! @spread): Community @guard @create
+  updateCommunity(input: UpdateCommunityInput! @spread): Community @guard @update
+  deleteCommunity(id: ID!): Community @guard @delete
+}
+
+input CreateCommunityInput @validator {
+  name: String! @rules(apply: ["unique:communities,name"])
+  description: String!
+  users: CreateUpdateUserBelongsToMany!
+}
+
+input UpdateCommunityInput @validator {
+  id: ID!
+  name: String
+  description: String
+  users: CreateUpdateUserBelongsToMany
+}
+
+type Community {
+    id: ID!
+    name: String!
+    description: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+    users: [User!]! @belongsToMany
+}
+
+input CreateUpdateUserBelongsToMany {
+  sync: [ID!]
+  disconnect: [ID!]
+}
