@@ -38,4 +38,19 @@ abstract class TestCase extends BaseTestCase
     {
         return $user->createToken('oexchanger')->plainTextToken;
     }
+
+    /**
+     * Get the id from the mutation
+     *
+     * @param  mixed $response
+     * @return int
+     */
+    protected function getMutationId($response, string $mutation): int
+    {
+        $data = json_decode($response->getContent(), true);
+
+        $id = $data['data'][$mutation]['id'];
+
+        return strval($id);
+    }
 }

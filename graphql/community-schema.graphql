@@ -1,12 +1,12 @@
 extend type Query {
-    communities: [Community!]! @all @guard
-    community(id: ID! @eq): Community @find
+    communities: [Community!]! @all @softDeletes @guard @can(ability: "viewAny")
+    community(id: ID! @eq): Community @find @can(ability: "view", find: "id")
 }
 
 extend type Mutation {
-  createCommunity(input: CreateCommunityInput! @spread): Community @guard @create
-  updateCommunity(input: UpdateCommunityInput! @spread): Community @guard @update
-  deleteCommunity(id: ID!): Community @guard @delete
+  createCommunity(input: CreateCommunityInput! @spread): Community @create @guard @can(ability: "create")
+  updateCommunity(input: UpdateCommunityInput! @spread): Community @update @guard @can(ability: "update", find: "id")
+  deleteCommunity(id: ID!): Community @delete @guard @can(ability: "delete", find: "id")
 }
 
 input CreateCommunityInput @validator {
