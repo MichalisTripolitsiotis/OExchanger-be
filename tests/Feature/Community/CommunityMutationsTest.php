@@ -23,7 +23,7 @@ class CommunityMutationsTest extends TestCase
             "name" => "Greece",
             "description" => "Discuss about Greece"
         ]);
-        $this->user->communities()->attach($this->community->id);
+        $this->user->moderatedCommunities()->attach($this->community->id);
     }
 
     /**
@@ -40,7 +40,7 @@ class CommunityMutationsTest extends TestCase
                     id,
                     name,
                     description
-                    users {
+                    moderators {
                         id,
                         name
                     }
@@ -50,7 +50,7 @@ class CommunityMutationsTest extends TestCase
         $input = [
             "name" => "Motorbikes",
             "description" => "Discuss about bikes",
-            "users" => [
+            "moderators" => [
                 "sync" => [$this->user->id]
             ]
         ];
@@ -68,7 +68,7 @@ class CommunityMutationsTest extends TestCase
                     'id' => $id,
                     'name' => $input['name'],
                     'description' => $input['description'],
-                    'users' => [
+                    'moderators' => [
                         [
                             'id' => strval($this->user->id),
                             'name' => $this->user->name
@@ -85,18 +85,18 @@ class CommunityMutationsTest extends TestCase
         ]);
 
 
-        $this->assertDatabaseHas('user_communities', [
+        $this->assertDatabaseHas('moderated_communities', [
             'user_id' => $this->user->id,
             'community_id' => $id
         ]);
     }
 
     /**
-     * Ensure a user can update a community.
+     * Ensure a moderator user can update a community.
      *
      * @return void
      */
-    public function testUserCanUpdateCommunity(): void
+    public function testModeratorUserUpdateCommunity(): void
     {
         $updateMutation =
             /** @lang GraphQL */
@@ -105,7 +105,7 @@ class CommunityMutationsTest extends TestCase
                     id,
                     name,
                     description
-                    users {
+                    moderators {
                         id,
                         name
                     }
@@ -116,7 +116,7 @@ class CommunityMutationsTest extends TestCase
             "id" => $this->community->id,
             "name" => "Germany",
             "description" => "Discuss about Germany",
-            "users" => [
+            "moderators" => [
                 "sync" => [$this->user->id]
             ]
         ];
@@ -132,7 +132,7 @@ class CommunityMutationsTest extends TestCase
                     'id' => $this->community->id,
                     'name' => $input['name'],
                     'description' => $input['description'],
-                    'users' => [
+                    'moderators' => [
                         [
                             'id' => strval($this->user->id),
                             'name' => $this->user->name
@@ -149,7 +149,7 @@ class CommunityMutationsTest extends TestCase
         ]);
 
 
-        $this->assertDatabaseHas('user_communities', [
+        $this->assertDatabaseHas('moderated_communities', [
             'user_id' => $this->user->id,
             'community_id' => $this->community->id
         ]);
@@ -169,7 +169,7 @@ class CommunityMutationsTest extends TestCase
                     id,
                     name,
                     description
-                    users {
+                    moderators {
                         id,
                         name
                     }
@@ -180,7 +180,7 @@ class CommunityMutationsTest extends TestCase
             "id" => $this->community->id,
             "name" => "Germany",
             "description" => "Discuss about Germany",
-            "users" => [
+            "moderators" => [
                 "sync" => [$this->secondUser->id]
             ]
         ];
@@ -199,7 +199,7 @@ class CommunityMutationsTest extends TestCase
         ]);
 
 
-        $this->assertDatabaseMissing('user_communities', [
+        $this->assertDatabaseMissing('moderated_communities', [
             'user_id' => $this->secondUser->id,
             'community_id' => $this->community->id
         ]);
@@ -210,7 +210,7 @@ class CommunityMutationsTest extends TestCase
      *
      * @return void
      */
-    public function testUserCanDeleteCommunity(): void
+    public function testModeratorUserCanDeleteCommunity(): void
     {
         $deleteMutation =
             /** @lang GraphQL */
@@ -219,7 +219,7 @@ class CommunityMutationsTest extends TestCase
                     id,
                     name,
                     description
-                    users {
+                    moderators {
                         id,
                         name
                     }
@@ -239,7 +239,7 @@ class CommunityMutationsTest extends TestCase
                     'id' => $this->community->id,
                     'name' => $this->community->name,
                     'description' => $this->community->description,
-                    'users' => [
+                    'moderators' => [
                         [
                             'id' => strval($this->user->id),
                             'name' => $this->user->name
@@ -256,7 +256,7 @@ class CommunityMutationsTest extends TestCase
         ]);
 
 
-        $this->assertDatabaseMissing('user_communities', [
+        $this->assertDatabaseMissing('moderated_communities', [
             'user_id' => $this->secondUser->id,
             'community_id' => $this->community->id
         ]);
@@ -277,7 +277,7 @@ class CommunityMutationsTest extends TestCase
                     id,
                     name,
                     description
-                    users {
+                    moderators {
                         id,
                         name
                     }
@@ -300,7 +300,7 @@ class CommunityMutationsTest extends TestCase
         ]);
 
 
-        $this->assertDatabaseHas('user_communities', [
+        $this->assertDatabaseHas('moderated_communities', [
             'user_id' => $this->user->id,
             'community_id' => $this->community->id
         ]);

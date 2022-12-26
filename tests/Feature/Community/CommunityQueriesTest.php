@@ -23,7 +23,7 @@ class CommunityQueriesTest extends TestCase
             "name" => "Greece",
             "description" => "Discuss about Greece"
         ]);
-        $this->user->communities()->attach($this->community->id);
+        $this->user->moderatedCommunities()->attach($this->community->id);
     }
 
     /**
@@ -72,7 +72,7 @@ class CommunityQueriesTest extends TestCase
                     id,
                     name,
                     description
-                    users {
+                    moderators {
                         id,
                         name
                     }
@@ -92,7 +92,7 @@ class CommunityQueriesTest extends TestCase
                     'id' => $this->community->id,
                     'name' => $this->community->name,
                     'description' => $this->community->description,
-                    'users' => [
+                    'moderators' => [
                         [
                             'id' => strval($this->user->id),
                             'name' => $this->user->name
@@ -117,7 +117,7 @@ class CommunityQueriesTest extends TestCase
                     id,
                     name,
                     description
-                    users {
+                    moderators {
                         id,
                         name
                     }

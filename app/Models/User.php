@@ -63,9 +63,17 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * @return BelongsToMany
      */
-    public function communities(): BelongsToMany
+    public function moderatedCommunities(): BelongsToMany
     {
-        return $this->belongsToMany(Community::class, 'user_communities')->withTimestamps();
+        return $this->belongsToMany(Community::class, 'moderated_communities')->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function subscribedCommunities(): BelongsToMany
+    {
+        return $this->belongsToMany(Community::class, 'subscribed_communities')->withTimestamps();
     }
 
     /**

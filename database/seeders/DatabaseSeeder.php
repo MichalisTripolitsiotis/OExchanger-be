@@ -20,7 +20,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             CommunitySeeder::class,
-            UserCommunitySeeder::class,
+            UserModeratedCommunitySeeder::class,
+            UserSubscribedCommunitySeeder::class,
+            PostSeeder::class,
         ]);
     }
 }

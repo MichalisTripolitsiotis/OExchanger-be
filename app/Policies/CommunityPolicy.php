@@ -30,7 +30,11 @@ class CommunityPolicy
      */
     public function view(User $user, Community $community)
     {
-        return $user->communities->contains($community);
+        if ($user->moderatedCommunities->contains($community) || $user->subscribedCommunities->contains($community)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -53,7 +57,7 @@ class CommunityPolicy
      */
     public function update(User $user, Community $community)
     {
-        return $user->communities->contains($community);
+        return $user->moderatedCommunities->contains($community);
     }
 
     /**
@@ -65,6 +69,6 @@ class CommunityPolicy
      */
     public function delete(User $user, Community $community)
     {
-        return $user->communities->contains($community);
+        return $user->moderatedCommunities->contains($community);
     }
 }

@@ -4,21 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * App\Models\Community
+ * App\Models\Post
  *
  * @property int $id
- * @property string $name
- * @property string $description
+ * @property string $title
+ * @property string $text
+ * @property int $user_id
+ * @property int $community_id
  * @property-read Carbon|null $deleted_at
  * @property-read Carbon|null $created_at
  * @property-read Carbon|null $updated_at
  *
  */
-class Community extends Model
+class Post extends Model
 {
     use HasFactory, SoftDeletes;
 
@@ -28,23 +30,25 @@ class Community extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
-        'description'
+        'title',
+        'text',
+        'user_id',
+        'community_id'
     ];
 
     /**
-     * @return BelongsToMany
+     * @return BelongsTo
      */
-    public function moderators(): BelongsToMany
+    public function user(): BelongsTo
     {
-        return $this->belongsToMany(User::class, 'moderated_communities')->withTimestamps();
+        return $this->belongsTo(User::class);
     }
 
     /**
-     * @return BelongsToMany
+     * @return BelongsTo
      */
-    public function subscribers(): BelongsToMany
+    public function community(): BelongsTo
     {
-        return $this->belongsToMany(User::class, 'subscribed_communities')->withTimestamps();
+        return $this->belongsTo(Community::class);
     }
 }

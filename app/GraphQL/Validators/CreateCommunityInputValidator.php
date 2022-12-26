@@ -14,7 +14,7 @@ final class CreateCommunityInputValidator extends Validator
     public function rules(): array
     {
         return [
-            'users.sync' => [
+            'moderators.sync' => [
                 'required'
             ]
         ];
@@ -28,7 +28,7 @@ final class CreateCommunityInputValidator extends Validator
     public function messages(): array
     {
         return [
-            'users.sync' => 'The moderator ID is required. The community needs at least one moderator.'
+            'moderators.sync' => 'The moderator ID is required. The community needs at least one moderator.'
         ];
     }
 }
