@@ -12,14 +12,16 @@ extend type Mutation {
 input CreateCommunityInput @validator {
   name: String! @rules(apply: ["unique:communities,name"])
   description: String!
-  moderators: CreateUpdateModerators!
+  moderators: CreateUpdateUsers!
+  subscribers: CreateUpdateUsers!
 }
 
 input UpdateCommunityInput @validator {
   id: ID!
   name: String
   description: String
-  moderators: CreateUpdateModerators
+  moderators: CreateUpdateUsers
+  subscribers: CreateUpdateUsers
 }
 
 type Community {
@@ -32,7 +34,7 @@ type Community {
     subscribers: [User!]! @belongsToMany
 }
 
-input CreateUpdateModerators {
+input CreateUpdateUsers {
   sync: [ID!]
   disconnect: [ID!]
 }
