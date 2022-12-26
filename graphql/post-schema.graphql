@@ -1,0 +1,44 @@
+extend type Query {
+    posts: [Post!]! @all @softDeletes @guard @can(ability: "viewAny")
+    post(id: ID! @eq): Post @find @can(ability: "view", find: "id")
+}
+
+extend type Mutation {
+  createPost(input: CreatePostInput! @spread): Post @create @guard @can(ability: "create")
+  updatePost(input: UpdatePostInput! @spread): Post @update @guard @can(ability: "update", find: "id")
+  deletePost(id: ID!): Post @delete @guard @can(ability: "delete", find: "id")
+}
+
+type Post {
+    id: ID!
+    title: String!
+    text: String!
+    user: User! @belongsTo
+    community: Community! @belongsTo
+    description: String!
+    created_at: DateTime!
+    updated_at: DateTime!
+}
+
+input CreatePostInput {
+  title: String!
+  text: String!
+  user: CreateUpdateUser!
+  community: CreateUpdateCommunity!
+}
+
+input UpdatePostInput {
+  id: ID!
+  title: String!
+  text: String!
+  user: CreateUpdateUser
+  community: CreateUpdateCommunity
+}
+
+input CreateUpdateUser {
+  connect: ID
+}
+
+input CreateUpdateCommunity {
+  connect: ID
+}
