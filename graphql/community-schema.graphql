@@ -13,7 +13,6 @@ input CreateCommunityInput @validator {
   name: String! @rules(apply: ["unique:communities,name"])
   description: String!
   moderators: CreateUpdateUsers!
-  subscribers: CreateUpdateUsers!
 }
 
 input UpdateCommunityInput @validator {

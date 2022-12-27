@@ -28,7 +28,7 @@ class PostPolicy
      * @param  \App\Models\Post  $post
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Post $Post)
+    public function view(User $user, Post $post)
     {
         return true;
     }
