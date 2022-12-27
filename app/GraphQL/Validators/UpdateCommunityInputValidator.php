@@ -18,7 +18,7 @@ final class UpdateCommunityInputValidator extends Validator
             'name' => [
                 Rule::unique('communities', 'name')->ignore($this->arg('id'), 'id')
             ],
-            'users.sync' => [
+            'moderators.sync' => [
                 'required'
             ]
         ];
@@ -32,7 +32,7 @@ final class UpdateCommunityInputValidator extends Validator
     public function messages(): array
     {
         return [
-            'users.sync' => 'The moderator ID is required. The community needs at least one moderator.'
+            'moderators.sync' => 'The moderator ID is required. The community needs at least one moderator.'
         ];
     }
 }

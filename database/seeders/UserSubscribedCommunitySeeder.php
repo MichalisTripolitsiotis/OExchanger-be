@@ -7,7 +7,7 @@ use App\Models\User;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class UserCommunitySeeder extends Seeder
+class UserSubscribedCommunitySeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -17,13 +17,13 @@ class UserCommunitySeeder extends Seeder
     public function run()
     {
         // Not all users should be moderators. Exclude some of them.
-        $users = User::all()->random(rand(1, User::count() - 1));
+        $users = User::whereDoesntHave('moderatedCommunities')->get();
         $communites = Community::all();
 
         $users->each(function ($user) use ($communites) {
-            // Moderate 1 or maximum 2 communities
-            $IDs = $communites->random(rand(1, 2))->pluck('id')->toArray();
-            $user->communities()->attach($IDs);
+            // Join 1 or maximum 3 communities
+            $IDs = $communites->random(rand(1, 3))->pluck('id')->toArray();
+            $user->subscribedCommunities()->attach($IDs);
         });
     }
 }

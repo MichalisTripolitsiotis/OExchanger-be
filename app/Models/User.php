@@ -9,6 +9,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
@@ -61,11 +62,27 @@ class User extends Authenticatable implements MustVerifyEmail
     ];
 
     /**
+     * @return HasMany
+     */
+    public function posts(): HasMany
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    /**
      * @return BelongsToMany
      */
-    public function communities(): BelongsToMany
+    public function moderatedCommunities(): BelongsToMany
     {
-        return $this->belongsToMany(Community::class, 'user_communities')->withTimestamps();
+        return $this->belongsToMany(Community::class, 'moderated_communities')->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function subscribedCommunities(): BelongsToMany
+    {
+        return $this->belongsToMany(Community::class, 'subscribed_communities')->withTimestamps();
     }
 
     /**

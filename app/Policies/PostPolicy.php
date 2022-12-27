@@ -2,11 +2,11 @@
 
 namespace App\Policies;
 
-use App\Models\Community;
+use App\Models\Post;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class CommunityPolicy
+class PostPolicy
 {
     use HandlesAuthorization;
 
@@ -25,16 +25,12 @@ class CommunityPolicy
      * Determine whether the user can view the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Community  $community
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function view(User $user, Community $community)
+    public function view(User $user, Post $post)
     {
-        if ($user->moderatedCommunities->contains($community) || $user->subscribedCommunities->contains($community)) {
-            return true;
-        }
-
-        return false;
+        return true;
     }
 
     /**
@@ -52,23 +48,23 @@ class CommunityPolicy
      * Determine whether the user can update the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Community  $community
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function update(User $user, Community $community)
+    public function update(User $user, Post $post)
     {
-        return $user->moderatedCommunities->contains($community);
+        return $user->posts->contains($post);
     }
 
     /**
      * Determine whether the user can delete the model.
      *
      * @param  \App\Models\User  $user
-     * @param  \App\Models\Community  $community
+     * @param  \App\Models\Post  $post
      * @return \Illuminate\Auth\Access\Response|bool
      */
-    public function delete(User $user, Community $community)
+    public function delete(User $user, Post $post)
     {
-        return $user->moderatedCommunities->contains($community);
+        return $user->posts->contains($post);
     }
 }
