@@ -44,6 +44,7 @@ return [
          */
         // 'prefix' => '',
         // 'domain' => '',
+        'guard' => 'sanctum',
     ],
 
     /*
