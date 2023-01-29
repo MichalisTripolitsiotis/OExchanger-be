@@ -16,6 +16,7 @@ use Tests\TestCase;
 class AuthTest extends TestCase
 {
     protected static $token = null;
+    protected User $user;
 
     public function setUp(): void
     {

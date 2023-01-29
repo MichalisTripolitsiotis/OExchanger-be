@@ -20,7 +20,7 @@ class VerifyEmail extends NotificationsVerifyEmail
 
         // The reason we get the url, is to be used from the FE
         // in order to send the user to a specific url.
-        return $notifiable->url . '?token=' . $payload;
+        return $notifiable->url . 'token=' . $payload;
     }
 
     /**
