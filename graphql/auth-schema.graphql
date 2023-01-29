@@ -30,7 +30,7 @@ type User {
 }
 
 input RegisterInput {
-    name: String!
+    name: String! @rules(apply: ["required", "name", "unique:users,name"])
     email: String! @rules(apply: ["required", "email", "unique:users,email"])
     password: String! @rules(apply: ["required", "confirmed", "min:8"])
     password_confirmation: String!
