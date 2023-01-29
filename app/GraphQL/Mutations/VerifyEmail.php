@@ -16,7 +16,7 @@ final class VerifyEmail
      */
     public function __invoke($_, array $args)
     {
-        $decodedToken = json_decode(base64_decode($args['token']));
+        $decodedToken = json_decode(base64_decode($args['code']));
         $expiration = decrypt($decodedToken->expiration);
         $email = decrypt($decodedToken->hash);
 

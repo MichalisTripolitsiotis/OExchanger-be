@@ -43,7 +43,7 @@ input ForgotPasswordInput {
 }
 
 input VerifyEmailInput {
-    token: String!
+    code: String!
 }
 
 input ResetPasswordInput {
