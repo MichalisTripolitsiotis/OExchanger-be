@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\Exceptions\GraphQLException;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -21,13 +22,13 @@ final class VerifyEmail
         $email = decrypt($decodedToken->hash);
 
         if (Carbon::parse($expiration) < now()) {
-            throw new Exception('Token expired.');
+            throw new GraphQLException('Token expired. Try to register again later.');
         }
 
         $user = User::where('email', $email)->first();
 
         if (!$user) {
-            throw new Exception('User not found.');
+            throw new GraphQLException('User not found.');
         }
 
         $user->markEmailAsVerified();
