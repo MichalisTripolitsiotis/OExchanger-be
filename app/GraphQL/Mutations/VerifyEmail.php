@@ -13,7 +13,7 @@ final class VerifyEmail
 {
     /**
      * @param  null  $_
-     * @param  array{token: string}  $args
+     * @param  array{code: string}  $args
      */
     public function __invoke($_, array $args)
     {

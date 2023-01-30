@@ -7,11 +7,6 @@ use Nuwave\Lighthouse\Exceptions\RendersErrorsExtensions;
 
 class GraphQLException extends Exception implements RendersErrorsExtensions
 {
-    /**
-     * @var @string
-     */
-    protected $reason;
-
     public function __construct(string $message)
     {
         parent::__construct($message);
