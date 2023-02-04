@@ -177,7 +177,7 @@ class AuthTest extends TestCase
 
         $input = [
             'input' => [
-                "token" => $payload
+                "code" => $payload
             ]
         ];
 
@@ -318,7 +318,7 @@ class AuthTest extends TestCase
 
         $input = [
             'input' => [
-                'token' => $token,
+                'code' => $token,
                 'email' => $this->user->email,
                 'password' => 'newPassword123',
                 'password_confirmation' => 'newPassword123'
@@ -361,7 +361,7 @@ class AuthTest extends TestCase
 
         $input = [
             'input' => [
-                'token' => 'invalid_token',
+                'code' => 'invalid_token',
                 'email' => $this->user->email,
                 'password' => 'newPassword12345',
                 'password_confirmation' => 'newPassword12345'
@@ -376,7 +376,7 @@ class AuthTest extends TestCase
         $response->assertJson([
             'errors' => [
                 [
-                    'debugMessage' => "Provided token is invalid"
+                    'message' => "Token is invalid."
                 ],
             ],
         ]);

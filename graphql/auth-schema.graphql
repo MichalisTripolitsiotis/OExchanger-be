@@ -30,7 +30,7 @@ type User {
 }
 
 input RegisterInput {
-    name: String! @rules(apply: ["required", "name", "unique:users,name"])
+    name: String!
     email: String! @rules(apply: ["required", "email", "unique:users,email"])
     password: String! @rules(apply: ["required", "confirmed", "min:8"])
     password_confirmation: String!
@@ -47,7 +47,7 @@ input VerifyEmailInput {
 }
 
 input ResetPasswordInput {
-    token: String!
+    code: String!
     email: String! @rules(apply: ["required", "email"])
     password: String! @rules(apply: ["required", "confirmed", "min:8"])
     password_confirmation: String!

@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Mutations;
 
+use App\Exceptions\GraphQLException;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\Hash;
@@ -15,7 +16,7 @@ final class ResetPassword
      */
     public function __invoke($_, array $args)
     {
-        $token = $args['token'];
+        $token = $args['code'];
         $email = $args['email'];
         $password = $args['password'];
 
@@ -35,15 +36,15 @@ final class ResetPassword
         });
 
         if ($status === Password::INVALID_USER) {
-            abort(403, 'User not found');
+            throw new GraphQLException('User not found.');
         }
 
         if ($status === Password::INVALID_TOKEN) {
-            abort(401, 'Provided token is invalid');
+            throw new GraphQLException('Token is invalid.');
         }
 
         if ($status === Password::PASSWORD_RESET) {
-            return $user->createToken('oexchange')->plainTextToken;
+            return true;
         }
     }
 }
