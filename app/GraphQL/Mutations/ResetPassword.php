@@ -12,7 +12,7 @@ final class ResetPassword
 {
     /**
      * @param  null  $_
-     * @param  array{token: string, email: string, password: string}  $args
+     * @param  array{code: string, email: string, password: string}  $args
      */
     public function __invoke($_, array $args)
     {
