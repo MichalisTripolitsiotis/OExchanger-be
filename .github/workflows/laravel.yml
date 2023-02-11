@@ -29,8 +29,6 @@ jobs:
         run: php -r "file_exists('.env.ci') || copy('.env.example', '.env');"
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
-      - name: Generate key
-        run: php artisan key:generate
       - name: Run code quality
         run: ./vendor/bin/phpstan analyse --memory-limit=2G
       - name: Run code style
