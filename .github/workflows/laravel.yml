@@ -26,7 +26,7 @@ jobs:
           php-version: "8.1.7"
       - uses: actions/checkout@v3
       - name: Copy .env.ci
-        run: php -r "file_exists('.env.testing') || copy('.env.example', '.env');"
+        run: php -r "file_exists('.env.ci') || copy('.env.example', '.env');"
       - name: Install Dependencies
         run: composer install -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist
       - name: Generate key
