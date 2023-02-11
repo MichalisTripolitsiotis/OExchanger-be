@@ -15,7 +15,7 @@ jobs:
         # Docker Hub image (also with version)
         image: mysql:5.7
         env:
-          MYSQL_DATABASE: testing
+          MYSQL_DATABASE: laravel
           MYSQL_ROOT_PASSWORD: password
         ports:
           - 33306:3306
@@ -25,6 +25,8 @@ jobs:
         with:
           php-version: "8.1.7"
       - uses: actions/checkout@v3
+      - name: Create database
+        run: mysql -u root -e "CREATE DATABASE testing DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;" | mysql --user=root --password="password" --host=mysql"
       - name: Copy .env
         run: cp .env.testing .env
       - name: Install Dependencies
