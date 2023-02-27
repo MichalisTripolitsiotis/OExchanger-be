@@ -108,4 +108,26 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         $this->notify(new VerifyEmail());
     }
+
+    /**
+     * Get a count from the communities that this user
+     * is a moderator.
+     *
+     * @return int
+     */
+    public function moderatedCommunitiesCount(): int
+    {
+        return $this->moderatedCommunities()->count();
+    }
+
+    /**
+     * Get a count from the communities that this user
+     * has joined.
+     *
+     * @return int
+     */
+    public function subscribedCommunitiesCount(): int
+    {
+        return $this->subscribedCommunities()->count();
+    }
 }
