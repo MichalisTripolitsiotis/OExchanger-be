@@ -29,6 +29,7 @@ type User {
     subscribedCommunities: [Community!]! @belongsToMany
     moderatedCommunitiesCount: Int! @method
     subscribedCommunitiesCount: Int! @method
+    postsCount: Int! @method
 }
 
 input RegisterInput {

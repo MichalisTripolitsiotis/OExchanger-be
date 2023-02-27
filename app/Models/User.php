@@ -130,4 +130,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->subscribedCommunities()->count();
     }
+
+    /**
+     * Get a count from the posts the user has created
+     * in the communities.
+     *
+     * @return int
+     */
+    public function postsCount(): int
+    {
+        return $this->posts()->count();
+    }
 }
