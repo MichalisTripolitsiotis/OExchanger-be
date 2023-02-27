@@ -27,6 +27,8 @@ type User {
     updated_at: DateTime!
     moderatedCommunities: [Community!]! @belongsToMany
     subscribedCommunities: [Community!]! @belongsToMany
+    moderatedCommunitiesCount: Int! @method
+    subscribedCommunitiesCount: Int! @method
 }
 
 input RegisterInput {
