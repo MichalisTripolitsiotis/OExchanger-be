@@ -31,6 +31,7 @@ type Community {
     updated_at: DateTime!
     moderators: [User!]! @belongsToMany
     subscribers: [User!]! @belongsToMany
+    posts: [Post]! @hasMany
 }
 
 input CreateUpdateUsers {
